@@ -1,5 +1,9 @@
 package com.spider.util;
 
+import com.spider.entity.Blog;
+import com.spider.entity.BlogEnum;
+
+
 
 /**
  * blog工具类
@@ -9,13 +13,13 @@ package com.spider.util;
  */
 public class BlogUtils {
 
-	public static void main(String[] args) throws Throwable {
-		String url = "https://www.baidu.com/s?ie=你";
-		byte[] bytes = url.getBytes("utf-8");
-		StringBuilder sb = new StringBuilder();
-		for(byte b : bytes){
-			sb.append(b);
-		}
-		System.out.println(sb);
+	/**
+	 * 将url按照自定义规则编码
+	 */
+	public static void encodeUrl(Blog blog){
+		String url = blog.getUrl();
+		BlogEnum type = blog.getType();
+		String encode = type.getCode() + url.substring(type.getHost().length()-1).replace("/", "-").replace(".", "-");
+		blog.setId(encode);
 	}
 }

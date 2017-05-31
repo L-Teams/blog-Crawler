@@ -14,7 +14,7 @@ public class BloomFilter {
 	private BitSet bitSet = new BitSet(DEFAULT_LEN);
 	private int[] seeds = { 3, 5, 7, 11, 17, 21, 31 };
 	private BloomHash[] bh = null;
-
+	
 	{
 		bh = new BloomHash[seeds.length];
 		for (int i = 0; i < seeds.length; i++) {

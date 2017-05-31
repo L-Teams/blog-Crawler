@@ -25,13 +25,17 @@ public class Blog {
 
 	private int comments;// 评论人数
 
-	private int copyright;// 是否原创
+	private int copyright;// 是否为转载文章（转载文章只存库不添加索引--防止搜索出很多转载一样的内容文章）
 
 	private String summery;// 文章摘要
 
 	private int digg;// 顶的人数
 
 	private int bury;// 踩的人数
+	
+	private String content;//文章内容
+	
+	private BlogEnum type;//博客的类型
 
 	public String getId() {
 		return id;
@@ -136,13 +140,32 @@ public class Blog {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public BlogEnum getType() {
+		return type;
+	}
+
+	public void setType(BlogEnum type) {
+		this.type = type;
+	}
 
 	@Override
 	public String toString() {
-		return "Blog [id=" + id + ", author=" + author + ", title=" + title
-				+ ", date=" + date + ", tags=" + tags + ", category="
-				+ category + ", view=" + view + ", comments=" + comments
-				+ ", copyright=" + copyright + ", summery=" + summery
-				+ ", digg=" + digg + ", bury=" + bury + "]";
+		return "Blog [id=" + id + ", url=" + url + ", author=" + author
+				+ ", title=" + title + ", date=" + date + ", tags=" + tags
+				+ ", category=" + category + ", view=" + view + ", comments="
+				+ comments + ", copyright=" + copyright + ", summery="
+				+ summery + ", digg=" + digg + ", bury=" + bury + ", content="
+				+ content + ", type=" + type + "]";
 	}
+
 }
