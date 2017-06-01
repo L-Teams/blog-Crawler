@@ -6,9 +6,7 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import com.spider.entity.Blog;
-import com.spider.entity.BlogEnum;
 import com.spider.service.CsdnService;
-import com.spider.util.BlogUtils;
 
 public class CsdnPageProcessor implements PageProcessor {
 	private CsdnService csdnService = new CsdnService();
@@ -22,11 +20,8 @@ public class CsdnPageProcessor implements PageProcessor {
 		if(flg){
 			//提取文章内容元素
 			Blog blog = csdnService.getBlobByPage(page);
-			blog.setType(BlogEnum.CSDN);
 			//将符合规则的url添加到待爬队列中
 			csdnService.addSeedTargetRequest(page);
-			//编码blog url
-			BlogUtils.encodeUrl(blog);
 		}else{
 			csdnService.addDetailTargetRequest(page);
 		}

@@ -11,6 +11,8 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.selector.Selectable;
 
 import com.spider.entity.Blog;
+import com.spider.entity.BlogEnum;
+import com.spider.util.BlogUtils;
 import com.spider.util.BloomFilter;
 import com.spider.util.ListUtils;
 /**
@@ -70,6 +72,10 @@ public class CsdnService {
 			// 博客内容
 			String content = page.getHtml().xpath("//div[@id='article_content']").get();
 			blog.setContent(content);
+			// 编码blog url
+			BlogUtils.encodeUrl(blog);
+			// 设置博客的类型
+			blog.setType(BlogEnum.CSDN);
 			return blog;
 		} catch (Exception e) {
 			logger.error("元素内容提取出现异常", e);
