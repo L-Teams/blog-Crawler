@@ -27,8 +27,8 @@ public class BloomFilter {
 		for(int i = 0 ; i < bh.length ; i++){
 			int hash = bh[i].bloomHash(url);
 			if(!bitSet.get(hash)){
+				bitSet.set(hash, true);
 				flg = false;
-				break;
 			}
 		}
 		return flg;

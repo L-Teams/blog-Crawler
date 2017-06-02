@@ -1,7 +1,7 @@
 package com.spider.entity;
 
 public enum BlogEnum {
-	CSDN(101, "CSDN博客","http://blog.csdn.net/");
+	CSDN(101, "CSDN博客","http://blog.csdn.net");
 	private int code;
 	private String name;
 	private String host;
