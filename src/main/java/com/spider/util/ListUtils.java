@@ -17,13 +17,13 @@ public class ListUtils {
 		}
 		StringBuilder result = new StringBuilder();
 		boolean flag = false;
-		for (String string : stringList) {
+		for (String tag : stringList) {
 			if (flag) {
 				result.append(",");
 			} else {
 				flag = true;
 			}
-			result.append(string);
+			result.append(tag);
 		}
 		return result.toString();
 	}

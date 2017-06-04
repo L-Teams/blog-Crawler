@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import us.codecraft.webmagic.Page;
 
-import com.spider.entity.BlobCommon;
+import com.spider.entity.Common;
 import com.spider.entity.BlogEnum;
 import com.spider.util.ListUtils;
 /**
@@ -27,54 +27,58 @@ public class CsdnService {
 			String copyright = page.getHtml().xpath("//span[@ico ico_type_Repost]").get();
 			// 博客分类
 			String category = ListUtils.listToString(page.getHtml().xpath("//div[@class='category_r']/label/span/text()").all());
-			page.putField(BlobCommon.CATEGORY, category);
+			page.putField(Common.CATEGORY, category);
 			// 评论人数
-			int comments = Integer.parseInt(page.getHtml().xpath("//div[@class='article_r']/span[@class='link_comments']").regex("\\((\\d+)\\)").get());
-			page.putField(BlobCommon.COMMENTS, comments);
+			String commentsStr = page.getHtml().xpath("//div[@class='article_r']/span[@class='link_comments']").regex("\\((\\d+)\\)").get();
+			int comments = Integer.parseInt(commentsStr != null ? commentsStr.trim() : "0");
+			page.putField(Common.COMMENTS, comments);
 			if(copyright == null || "".equals(copyright.trim())){
-				page.putField(BlobCommon.COPYRIGHT, 0);
+				page.putField(Common.COPYRIGHT, 0);
 			}else{
-				page.putField(BlobCommon.COPYRIGHT, 1);
+				page.putField(Common.COPYRIGHT, 1);
 			}
 			// 日期
 			String date = page.getHtml().xpath("//div[@class='article_r']/span[@class='link_postdate']/text()").get();
-			page.putField(BlobCommon.DATE, date);
+			page.putField(Common.DATE, date != null ? date.trim() : null);
 			// 标签
 			String tags = ListUtils.listToString(page.getHtml().xpath("//div[@class='article_l']/span[@class='link_categories']/a/allText()").all());
-			page.putField(BlobCommon.TAGS, tags);
+			page.putField(Common.TAGS, tags != null ? tags.trim() : null);
 			// 标题
 			String title = page.getHtml().xpath("//div[@class='article_title']//span[@class='link_title']/a/text()").get();
-			page.putField(BlobCommon.TITLE, title);
+			page.putField(Common.TITLE, title != null ? title.trim() : null);
 			// 阅读人数
-			int view = Integer.parseInt(page.getHtml().xpath("//div[@class='article_r']/span[@class='link_view']").regex("(\\d+)人阅读").get());
-			page.putField(BlobCommon.VIEW, view);
+			String viewStr = page.getHtml().xpath("//div[@class='article_r']/span[@class='link_view']").regex("(\\d+)人阅读").get();
+			int view = Integer.parseInt(viewStr != null ? viewStr.trim() : "0");
+			page.putField(Common.VIEW, view);
 			// 摘要
 			String summery = page.getHtml().xpath("//meta[@name='description']/@content").get();
-			page.putField(BlobCommon.SUMMERY, summery);
+			page.putField(Common.SUMMERY, summery != null ? summery.trim() : null);
 			// 顶的人数
-			int digg = Integer.parseInt(page.getHtml().xpath("//dl[@id='btnDigg']/dd/text()").get());
-			page.putField(BlobCommon.DIGG, digg);
+			String diggStr = page.getHtml().xpath("//dl[@id='btnDigg']/dd/text()").get();
+			int digg = Integer.parseInt(diggStr != null ? diggStr.trim() : "0");
+			page.putField(Common.DIGG, digg);
 			// 踩的人数
-			int bury = Integer.parseInt(page.getHtml().xpath("//dl[@id='btnBury']/dd/text()").get());
-			page.putField(BlobCommon.BURY, bury);
+			String buryStr = page.getHtml().xpath("//dl[@id='btnBury']/dd/text()").get();
+			int bury = Integer.parseInt(buryStr != null ? buryStr.trim() : "0");
+			page.putField(Common.BURY, bury);
 			// 博客的url
 			String url = page.getResultItems().getRequest().getUrl();
-			page.putField(BlobCommon.URL, url);
+			page.putField(Common.URL, url != null ? url.trim() : null);
 			// author
-			String author = page.getHtml().xpath("//div[@id='blog_userface']").links().regex("http://my.csdn.net/(\\w+)").get();
-			page.putField(BlobCommon.AUTHOR, author);
+			String author = page.getUrl().regex("http://blog.csdn.net/(\\w+)/article/details/").get();
+			page.putField(Common.AUTHOR, author);
 			// 博客内容
 			String content = page.getHtml().xpath("//div[@id='article_content']").get();
-			page.putField(BlobCommon.CONTENT, content);
+			page.putField(Common.CONTENT, content);
 			// 编码blog url
 			BlogEnum type = BlogEnum.CSDN;
-			String id = type.getCode() + url.substring(type.getHost().length()).replace("/", "-").replace(".", "-");
-			if(StringUtils.isEmpty(id))
+			String idfix = url.substring(type.getHost().length()).replace("/", "-").replace(".", "-");
+			String id = type.getCode() + idfix;
+			if(StringUtils.isEmpty(idfix))
 				page.setSkip(true);
-			page.putField(BlobCommon.ID, id);
+			page.putField(Common.ID, id);
 			// 设置博客的类型
-			page.putField(BlobCommon.TYPE,type.getCode());
-			
+			page.putField(Common.TYPE,type.getCode());
 		} catch (Exception e) {
 			page.setSkip(true);
 			logger.error("元素内容提取出现异常", e);

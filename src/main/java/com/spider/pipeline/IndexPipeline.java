@@ -13,7 +13,7 @@ import us.codecraft.webmagic.pipeline.Pipeline;
 public class IndexPipeline implements Pipeline {
 
 	public void process(ResultItems paramResultItems, Task paramTask) {
-
+		//TODO 将数据添加到索引中去
 	}
 
 }

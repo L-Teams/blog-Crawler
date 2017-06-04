@@ -1,6 +1,6 @@
 package com.spider.entity;
 
-public class BlobCommon {
+public class Common {
 	// 博客内容分类
 	public static final String CATEGORY = "category";
 	// 评论人数
@@ -31,4 +31,8 @@ public class BlobCommon {
 	public static final String TYPE = "type";
 	// 博客id
 	public static final String ID = "id";
+	// 爬取过的url中BloomFilter文件名
+	public static final String BLOOM_FILE = "bloom.dat";
+	// 待爬数据队列
+	public static final String QUEUE_FILE = "queue.dat";
 }

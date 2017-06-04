@@ -1,24 +1,28 @@
 package com.spider.util;
 
+import java.io.Serializable;
 import java.util.BitSet;
 
 /**
  * 布隆过滤(判断url是否重复)
- * 
+ * 当jvm和定时任务会将该对象序列化到本地
  * @author 孙洪亮
  *
  */
-public class BloomFilter {
+public class BloomFilter implements Serializable{
+	private static final long serialVersionUID = -1603764300772258583L;
 	// bitSet默认长度
-	private int DEFAULT_LEN = 1 << 30;
-	private BitSet bitSet = new BitSet(DEFAULT_LEN);
-	private int[] seeds = { 3, 5, 7, 11, 17, 21, 31 };
+	private int DEFAULT_LEN = 1 << 25;
+	private BitSet[] bitSet = null;
+	private int[] seeds = { 3, 5, 7, 11 ,31 };
 	private BloomHash[] bh = null;
 	
 	{
 		bh = new BloomHash[seeds.length];
+		bitSet = new BitSet[seeds.length];
 		for (int i = 0; i < seeds.length; i++) {
 			bh[i] = new BloomHash(seeds[i]);
+			bitSet[i] = new BitSet(DEFAULT_LEN);
 		}
 	}
 	
@@ -26,19 +30,16 @@ public class BloomFilter {
 		boolean flg = true;
 		for(int i = 0 ; i < bh.length ; i++){
 			int hash = bh[i].bloomHash(url);
-			if(!bitSet.get(hash)){
-				bitSet.set(hash, true);
+			if(!bitSet[i].get(hash)){
+				bitSet[i].set(hash, true);
 				flg = false;
 			}
 		}
 		return flg;
 	}
 	
-	public BitSet getBiteSet(){
-		return bitSet;
-	}
-
-	private class BloomHash {
+	private class BloomHash implements Serializable{
+		private static final long serialVersionUID = 5641732620746914430L;
 		int sale;
 		public BloomHash(int sale) {
 			this.sale = sale;

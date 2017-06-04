@@ -1,7 +1,9 @@
 package com.spider.entity;
 
+import java.util.Date;
+
 /**
- * 
+ * Blog
  * @author 孙洪亮
  *
  */
@@ -15,7 +17,7 @@ public class Blog {
 
 	private String title;// 标题
 
-	private String date;// 日期
+	private Date date;// 日期
 
 	private String tags;// 标签
 
@@ -32,10 +34,10 @@ public class Blog {
 	private int digg;// 顶的人数
 
 	private int bury;// 踩的人数
-	
-	private String content;//文章内容
-	
-	private BlogEnum type;//博客的类型
+
+	private String content;// 文章内容
+
+	private int type;// 博客的类型
 
 	public String getId() {
 		return id;
@@ -53,11 +55,11 @@ public class Blog {
 		this.title = title;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -140,7 +142,6 @@ public class Blog {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
 
 	public String getContent() {
 		return content;
@@ -150,11 +151,11 @@ public class Blog {
 		this.content = content;
 	}
 
-	public BlogEnum getType() {
+	public int getType() {
 		return type;
 	}
 
-	public void setType(BlogEnum type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 
