@@ -17,7 +17,10 @@ import com.spider.task.SerializeBloomFilterTaskService;
 
 public class CsdnPageProcessor implements PageProcessor {
 	private CsdnService csdnService = new CsdnService();
-	private Site site = Site.me().setRetryTimes(3).setSleepTime(1000).setTimeOut(10000);
+	private Site site = Site.me().setRetryTimes(3).setSleepTime(1000).
+			setTimeOut(10000).addHeader("Accept-Encoding", "gzip, deflate, sdch").
+			addHeader("Accept-Language", "zh-CN,zh;q=0.8").addHeader("Connection", "keep-alive").
+			setUserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
 
 	public Site getSite() {
 		return site;
@@ -44,7 +47,7 @@ public class CsdnPageProcessor implements PageProcessor {
 		pipelines.add(new DbPipeline());
 		// 从用户博客首页开始抓，开启8个线程，启动爬虫
 		Spider.create(new CsdnPageProcessor())
-				.addUrl("http://blog.csdn.net/hongliang_sun").thread(8)
+				.addUrl("http://blog.csdn.net/jiankunking").thread(8)
 				.setScheduler(new BlogScheduler()).setPipelines(pipelines).runAsync();
 		SerializeBloomFilterTaskService task = new SerializeBloomFilterTaskService();
 		task.startSerializeBloomFilterTask();

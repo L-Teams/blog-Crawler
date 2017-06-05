@@ -45,7 +45,7 @@ public class ShutdownHookService {
 		try {
 			out = new FileOutputStream(file);
 			objOut = new ObjectOutputStream(out);
-			objOut.writeObject(BlogScheduler.getBf());
+			objOut.writeObject(object);
 			objOut.flush();
 		} catch (IOException e) {
 			LOG.error("write object failed "+fileName , e);

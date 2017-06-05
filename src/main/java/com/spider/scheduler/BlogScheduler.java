@@ -21,21 +21,16 @@ public class BlogScheduler implements Scheduler{
 	private static ConcurrentLinkedQueue<Request> queue = null; 
 	private static BloomFilter bf = null;
 	static{
-		try {
-			Object fb = ShutdownHookService.readObjectFromFile(Common.BLOOM_FILE);
-			Object qb = ShutdownHookService.readObjectFromFile(Common.QUEUE_FILE);
-			if(fb != null)
-				bf = (BloomFilter) fb;
-			else{
-				bf = new BloomFilter();
-			}
-			if(qb != null){
-				queue = (ConcurrentLinkedQueue<Request>) qb;
-			}else{
-				queue =  new ConcurrentLinkedQueue<Request>();
-			}
-		} catch (Exception e) {
+		Object fb = ShutdownHookService.readObjectFromFile(Common.BLOOM_FILE);
+		Object qb = ShutdownHookService.readObjectFromFile(Common.QUEUE_FILE);
+		if(fb != null)
+			bf = (BloomFilter) fb;
+		else{
 			bf = new BloomFilter();
+		}
+		if(qb != null){
+			queue = (ConcurrentLinkedQueue<Request>) qb;
+		}else{
 			queue =  new ConcurrentLinkedQueue<Request>();
 		}
 	}
