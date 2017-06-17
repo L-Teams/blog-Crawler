@@ -1,6 +1,7 @@
 package com.spider.dao;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,13 +14,13 @@ import com.spider.util.JdbcUtils;
  */
 public class BlogDao {
 	public boolean insert(Blog b) {
-		String sql = "insert into blog(id,url,author,title,date,tags,category,view,comments,copyright,"
-				+ "summery,digg,bury,content,type,createtime,updatetime) "
-				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		boolean executeUpdate = JdbcUtils.executeUpdate(sql, b.getId(), b.getUrl(), b.getAuthor(),
+		String sql = "insert into csdnblog(id,url,author,title,date,tags,category,view,comments,copyright,"
+				+ "summery,digg,bury,content,createtime,updatetime) "
+				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		boolean executeUpdate = JdbcUtils.executeUpdate(sql, UUID.randomUUID().toString().replace("-", ""),b.getUrl(), b.getAuthor(),
 				b.getTitle(), b.getDate(), b.getTags(), b.getCategory(),
 				b.getView(), b.getComments(), b.getCopyright(), b.getSummery(),
-				b.getDigg(), b.getBury(), b.getContent(), b.getType(),
+				b.getDigg(), b.getBury(), b.getContent(),
 				new Date(), new Date());
 		return executeUpdate;
 	}
@@ -27,9 +28,9 @@ public class BlogDao {
 	/**
 	 * 判断是否存在当前书籍库
 	 */
-	public boolean isExist(String id) {
-		String sql = "select id from blog where id = ?";
-		String dbId = JdbcUtils.executeQuerySingle(sql, String.class, id);
+	public boolean isExist(String url) {
+		String sql = "select id from csdnblog where url = ?";
+		String dbId = JdbcUtils.executeQuerySingle(sql, String.class, url);
 		boolean result = true;
 		if(StringUtils.isEmpty(dbId)){
 			result = false;

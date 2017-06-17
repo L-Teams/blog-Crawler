@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 
 import us.codecraft.webmagic.Page;
 
-import com.spider.entity.Common;
 import com.spider.entity.BlogEnum;
+import com.spider.entity.Common;
 import com.spider.util.ListUtils;
 /**
  * csdn爬虫服务类
@@ -69,16 +69,9 @@ public class CsdnService {
 			page.putField(Common.AUTHOR, author);
 			// 博客内容
 			String content = page.getHtml().xpath("//div[@id='article_content']").get();
-			page.putField(Common.CONTENT, content);
-			// 编码blog url
-			BlogEnum type = BlogEnum.CSDN;
-			String idfix = url.substring(type.getHost().length()).replace("/", "-").replace(".", "-");
-			String id = type.getCode() + idfix;
-			if(StringUtils.isEmpty(idfix))
+			if(StringUtils.isEmpty(content))
 				page.setSkip(true);
-			page.putField(Common.ID, id);
-			// 设置博客的类型
-			page.putField(Common.TYPE,type.getCode());
+			page.putField(Common.CONTENT, content);
 		} catch (Exception e) {
 			page.setSkip(true);
 			logger.error("元素内容提取出现异常", e);

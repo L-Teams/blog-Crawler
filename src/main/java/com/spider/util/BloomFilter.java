@@ -12,7 +12,7 @@ import java.util.BitSet;
 public class BloomFilter implements Serializable{
 	private static final long serialVersionUID = -1603764300772258583L;
 	// bitSet默认长度
-	private int DEFAULT_LEN = 1 << 25;
+	private int DEFAULT_LEN = 1 << 28;
 	private BitSet[] bitSet = null;
 	private int[] seeds = { 3, 5, 7, 11 ,31 };
 	private BloomHash[] bh = null;

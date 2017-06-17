@@ -1,5 +1,6 @@
 package com.spider.scheduler;
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
@@ -16,7 +17,9 @@ import com.spider.util.BloomFilter;
  * @author 孙洪亮
  */
 @SuppressWarnings("unchecked")
-public class BlogScheduler implements Scheduler{
+public class BlogScheduler implements Scheduler ,Serializable{
+	private static final BlogScheduler bs = new BlogScheduler();
+	private static final long serialVersionUID = -8352923253868026434L;
 	private static final Logger LOG = Logger.getLogger(BlogScheduler.class);
 	private static ConcurrentLinkedQueue<Request> queue = null; 
 	private static BloomFilter bf = null;
@@ -34,6 +37,13 @@ public class BlogScheduler implements Scheduler{
 			queue =  new ConcurrentLinkedQueue<Request>();
 		}
 	}
+	
+	private BlogScheduler(){}
+	
+	public static BlogScheduler getInstance(){
+		return bs;
+	}
+	
 	public void push(Request request, Task task) {
 		String url = request.getUrl();
 		if(!bf.isExistUrl(url)){

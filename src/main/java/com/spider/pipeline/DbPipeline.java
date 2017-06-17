@@ -47,29 +47,20 @@ public class DbPipeline implements Pipeline{
 					b.setDate(DateUtils.parseStr2Date(date, DateUtils.DATE_LONG_FORMAT_NOSECOND).orElse(null));
 					int digg = result.get(Common.DIGG);
 					b.setDigg(digg);
-					String id = result.get(Common.ID);
-					b.setId(id);
 					String summery = result.get(Common.SUMMERY);
 					b.setSummery(summery);
 					String tags = result.get(Common.TAGS);
 					b.setTags(tags);
 					String title = result.get(Common.TITLE);
 					b.setTitle(title);
-					int type = result.get(Common.TYPE);
-					b.setType(type);
 					String url = result.get(Common.URL);
 					b.setUrl(url);
 					int view = result.get(Common.VIEW);
 					b.setView(view);
-					if(dao.isExist(b.getId())){
-						LOG.error("博客id为["+b.getId()+"]已存在数据库中");
+					if(dao.isExist(b.getUrl())){
 						return;
 					}
-					boolean insert = dao.insert(b);
-					if(!insert){
-						LOG.error("插入数据失败博客id为["+b.getId()+"]");
-						//TODO 插入失败的数据进行服务降级或存储到一个队列中
-					}
+					dao.insert(b);
 				} catch (Exception e) {
 					LOG.error("填数据异常",e);
 				}
@@ -94,6 +85,7 @@ public class DbPipeline implements Pipeline{
 		Pattern p_space = Pattern.compile(regEx_space, Pattern.CASE_INSENSITIVE);
 		Matcher m_space = p_space.matcher(htmlStr);
 		htmlStr = m_space.replaceAll(" ");
+		htmlStr = htmlStr.replace("&nbsp;", "").replace("&lt", "");
 		return htmlStr;
 	}
 }

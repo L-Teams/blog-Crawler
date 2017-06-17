@@ -27,10 +27,6 @@ public class Common {
 	public static final String AUTHOR = "author";
 	// 博客内容
 	public static final String CONTENT = "content";
-	// 博客类型
-	public static final String TYPE = "type";
-	// 博客id
-	public static final String ID = "id";
 	// 爬取过的url中BloomFilter文件名
 	public static final String BLOOM_FILE = "bloom.dat";
 	// 待爬数据队列

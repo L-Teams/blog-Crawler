@@ -1,19 +1,10 @@
 package com.spider.processor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-import com.spider.pipeline.DbPipeline;
-import com.spider.scheduler.BlogScheduler;
 import com.spider.service.CsdnService;
-import com.spider.service.ShutdownHookService;
-import com.spider.task.SerializeBloomFilterTaskService;
 
 public class CsdnPageProcessor implements PageProcessor {
 	private CsdnService csdnService = new CsdnService();
@@ -38,18 +29,5 @@ public class CsdnPageProcessor implements PageProcessor {
 			page.setSkip(true);
 			csdnService.addDetailTargetRequest(page);
 		}
-	}
-
-	public static void main(String[] args) throws Exception {
-		ShutdownHookService.addShutdownHook();
-		System.out.println("【爬虫开始】请耐心等待一大波数据到你碗里来...");
-		List<Pipeline> pipelines = new ArrayList<Pipeline>();
-		pipelines.add(new DbPipeline());
-		// 从用户博客首页开始抓，开启8个线程，启动爬虫
-		Spider.create(new CsdnPageProcessor())
-				.addUrl("http://blog.csdn.net/jiankunking").thread(8)
-				.setScheduler(new BlogScheduler()).setPipelines(pipelines).runAsync();
-		SerializeBloomFilterTaskService task = new SerializeBloomFilterTaskService();
-		task.startSerializeBloomFilterTask();
 	}
 }
