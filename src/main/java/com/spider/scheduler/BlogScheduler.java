@@ -3,8 +3,6 @@ package com.spider.scheduler;
 import java.io.Serializable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.apache.log4j.Logger;
-
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.Scheduler;
@@ -20,7 +18,6 @@ import com.spider.util.BloomFilter;
 public class BlogScheduler implements Scheduler ,Serializable{
 	private static final BlogScheduler bs = new BlogScheduler();
 	private static final long serialVersionUID = -8352923253868026434L;
-	private static final Logger LOG = Logger.getLogger(BlogScheduler.class);
 	private static ConcurrentLinkedQueue<Request> queue = null; 
 	private static BloomFilter bf = null;
 	static{
@@ -47,14 +44,6 @@ public class BlogScheduler implements Scheduler ,Serializable{
 	public void push(Request request, Task task) {
 		String url = request.getUrl();
 		if(!bf.isExistUrl(url)){
-			if(queue.size() > 10000){
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					LOG.error("线程sleep出现异常", e);
-				}
-				LOG.info("待爬取链接已经超过10000个");
-			}
 			queue.add(request);
 		}
 	}

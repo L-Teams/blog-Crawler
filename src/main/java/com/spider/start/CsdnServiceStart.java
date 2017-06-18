@@ -31,7 +31,14 @@ public class CsdnServiceStart extends HttpServlet {
 	private static final long serialVersionUID = 6964726643803509902L;
 	private static Spider sp = null;
 	private static Logger logger = Logger.getLogger(CsdnServiceStart.class);
-
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		doGet(req, resp);
+	}
+	
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -51,6 +58,9 @@ public class CsdnServiceStart extends HttpServlet {
 				sp.stop();
 			ShutdownHookService.writeObject(Common.BLOOM_FILE,BlogScheduler.getBf());
 			ShutdownHookService.writeObject(Common.QUEUE_FILE,BlogScheduler.getQueue());
+		} else if("start".equalsIgnoreCase(control)){
+			if (sp != null)
+				sp.start();
 		}
 	}
 
