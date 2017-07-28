@@ -13,10 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.Pipeline;
-import us.codecraft.webmagic.scheduler.Scheduler;
-
 import com.caucho.hessian.client.HessianProxyFactory;
 import com.spider.entity.Common;
 import com.spider.pipeline.DbPipeline;
@@ -26,6 +22,10 @@ import com.spider.scheduler.RomteScheduler;
 import com.spider.scheduler.SechedulerApi;
 import com.spider.service.ShutdownHookService;
 import com.spider.task.SerializeBloomFilterTaskService;
+
+import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.pipeline.Pipeline;
+import us.codecraft.webmagic.scheduler.Scheduler;
 
 public class CsdnServiceStart extends HttpServlet {
 	private static final long serialVersionUID = 6964726643803509902L;
@@ -44,8 +44,9 @@ public class CsdnServiceStart extends HttpServlet {
 			throws ServletException, IOException {
 		String control = req.getParameter("c");
 		String model = req.getParameter("m");
+		String servletContext = req.getServletContext().getContextPath();
 		if ("run".equals(control)) {
-			sp = start(model);
+			sp = start(model,servletContext);
 		} else if ("await".equals(control)) {
 			try {
 				if (sp != null)
@@ -64,7 +65,7 @@ public class CsdnServiceStart extends HttpServlet {
 		}
 	}
 
-	private Spider start(String model) {
+	private Spider start(String model,String contextPath) {
 		ShutdownHookService.addShutdownHook();
 		System.out.println("【爬虫开始】请耐心等待一大波数据到你碗里来...");
 		List<Pipeline> pipelines = new ArrayList<Pipeline>();
@@ -76,7 +77,7 @@ public class CsdnServiceStart extends HttpServlet {
 			SerializeBloomFilterTaskService task = new SerializeBloomFilterTaskService();
 			task.startSerializeBloomFilterTask();
 			s = Spider.create(new CsdnPageProcessor())
-					.addUrl("http://blog.csdn.net/jiankunking").thread(15)
+					.addUrl("http://blog.csdn.net/jiankunking").thread(30)
 					.setScheduler(scheduler).setPipelines(pipelines);
 			s.runAsync();
 		} else {
@@ -86,7 +87,7 @@ public class CsdnServiceStart extends HttpServlet {
 				inStream = this.getClass().getClassLoader()
 						.getResourceAsStream("base.properties");
 				properties.load(inStream);
-				String url = "http://{ip}:{port}/hessianService";
+				String url = "http://{ip}:{port}/"+contextPath+"hessianService";
 				String ip = properties.getProperty("server.ip");
 				String port = properties.getProperty("port");
 				url = url.replace("{ip}", ip).replace("{port}", port);
