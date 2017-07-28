@@ -2,6 +2,7 @@ package com.spider.pipeline;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +24,7 @@ import com.spider.util.DateUtils;
  *
  */
 public class DbPipeline implements Pipeline{
+	public static AtomicLong totalNum = new AtomicLong(0);
 	private static Executor executor = Executors.newFixedThreadPool(3);
 	private BlogDao dao = new BlogDao();
 	private Logger LOG = Logger.getLogger(DbPipeline.class);
@@ -60,7 +62,10 @@ public class DbPipeline implements Pipeline{
 					if(dao.isExist(b.getUrl())){
 						return;
 					}
-					dao.insert(b);
+					boolean insert = dao.insert(b);
+					if(insert){
+						totalNum.incrementAndGet();
+					}
 				} catch (Exception e) {
 					LOG.error("填数据异常",e);
 				}
@@ -88,4 +93,5 @@ public class DbPipeline implements Pipeline{
 		htmlStr = htmlStr.replace("&nbsp;", "").replace("&lt", "");
 		return htmlStr;
 	}
+	
 }

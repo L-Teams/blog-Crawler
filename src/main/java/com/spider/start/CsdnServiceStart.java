@@ -31,6 +31,7 @@ public class CsdnServiceStart extends HttpServlet {
 	private static final long serialVersionUID = 6964726643803509902L;
 	private static Spider sp = null;
 	private static Logger logger = Logger.getLogger(CsdnServiceStart.class);
+	private static final DbPipeline dbPipeline = new DbPipeline();
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -62,6 +63,8 @@ public class CsdnServiceStart extends HttpServlet {
 		} else if("start".equalsIgnoreCase(control)){
 			if (sp != null)
 				sp.start();
+		} else if("count".equals(control)){
+			resp.getWriter().println(dbPipeline.totalNum);
 		}
 	}
 
@@ -69,7 +72,7 @@ public class CsdnServiceStart extends HttpServlet {
 		ShutdownHookService.addShutdownHook();
 		System.out.println("【爬虫开始】请耐心等待一大波数据到你碗里来...");
 		List<Pipeline> pipelines = new ArrayList<Pipeline>();
-		pipelines.add(new DbPipeline());
+		pipelines.add(dbPipeline);
 		Spider s = null;
 		Scheduler scheduler = null;
 		if ("m".equals(model)) {
@@ -87,7 +90,7 @@ public class CsdnServiceStart extends HttpServlet {
 				inStream = this.getClass().getClassLoader()
 						.getResourceAsStream("base.properties");
 				properties.load(inStream);
-				String url = "http://{ip}:{port}/"+contextPath+"hessianService";
+				String url = "http://{ip}:{port}/"+contextPath+"/hessianService";
 				String ip = properties.getProperty("server.ip");
 				String port = properties.getProperty("port");
 				url = url.replace("{ip}", ip).replace("{port}", port);
